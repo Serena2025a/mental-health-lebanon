@@ -1,4 +1,42 @@
 import streamlit as st
+
+# --- Password Protection ---
+def check_password():
+    if "authenticated" not in st.session_state:
+        st.session_state.authenticated = False
+
+    if not st.session_state.authenticated:
+        st.markdown("""
+            <div style='text-align:center; padding: 80px 0 20px 0;'>
+                <h1 style='color:#2d6a4f; font-size:2rem; font-weight:700;'>
+                    Mental Health Burden in Post-Crisis Lebanon
+                </h1>
+                <p style='color:#555; font-size:1rem; margin-top:8px;'>
+                    MSBA382 – Healthcare Analytics | AUB Suliman S. Olayan School of Business
+                </p>
+                <p style='color:#555; font-size:0.9rem;'>
+                    Enter the password to access the dashboard.
+                </p>
+            </div>
+        """, unsafe_allow_html=True)
+
+        col1, col2, col3 = st.columns([1, 1, 1])
+        with col2:
+            pwd = st.text_input("Password", type="password", label_visibility="collapsed", placeholder="Enter password")
+            if st.button("Login", use_container_width=True):
+                if pwd == "msba382":
+                    st.session_state.authenticated = True
+                    st.rerun()
+                else:
+                    st.error("Incorrect password.")
+        return False
+    return True
+
+if not check_password():
+    st.stop()
+
+# --- Rest of your app below ---
+import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
